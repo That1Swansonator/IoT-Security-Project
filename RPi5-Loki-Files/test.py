@@ -3,7 +3,7 @@ import gpiod
 import time
 
 # Define GPIO chip and line numbers
-CHIP = "gpiochip0"  # Change to the appropriate chip name
+CHIP = "/dev/gpiochip0"  # Change to the appropriate chip name
 LINE_NUM = 17       # GPIO 17
 
 # Open the GPIO chip
