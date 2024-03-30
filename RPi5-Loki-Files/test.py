@@ -3,5 +3,8 @@ import time
 
 print("Hello There")
 
-led = gz.LED(17)
-led.on();
+status, count = 0
+led = gz.LED(16)
+
+while(count < 10):
+    led.toggle()
