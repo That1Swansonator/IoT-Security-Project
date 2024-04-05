@@ -1,3 +1,5 @@
+# The use of gpiod is a failure, moving on to using the C library directly using Cython
+
 # Import necessary modules
 import gpiod
 import time
