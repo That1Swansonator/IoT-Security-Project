@@ -10,10 +10,12 @@ LINE_NUM = 17       # GPIO 17
 chip = gpiod.Chip(CHIP)
 
 # Get the GPIO line
-#line = chip.get_line(LINE_NUM)
+line = gpiod.Line(chip, LINE_NUM)
 
 # request the lines 17 and 39 using the request_lines method
-lines = chip.request_lines([LINE_NUM, 39], consumer="my-led", type=gpiod.LINE_REQ_DIR_OUT)
+#lines = chip.request_lines([LINE_NUM, 39], consumer="my-led", type=gpiod.LINE_REQ_DIR_OUT)
+
+
 
 
 # Request the line for output
