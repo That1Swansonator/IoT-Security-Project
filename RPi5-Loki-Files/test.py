@@ -3,6 +3,7 @@ import gpiozero
 
 try:
     # Create a new LED object from the GPIO Zero library and assign it to the variable led at pin 17
+    # GPIO17 pin, not BCM17 pin
     led = gpiozero.LED(17)
 
     # blink the LED on and off every 1 second
