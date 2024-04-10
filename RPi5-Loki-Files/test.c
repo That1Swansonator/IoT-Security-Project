@@ -31,6 +31,10 @@ int main(void){
         sleep(1);
     }
 
+    // close the line
+    gpiod_line_release(line);
+    //close the chip
+    gpiod_chip_close(chip);
 
     return EXIT_SUCCESS;
 }
