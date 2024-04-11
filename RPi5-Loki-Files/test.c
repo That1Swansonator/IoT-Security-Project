@@ -2,9 +2,11 @@
 // Created by patrick on 4/9/24.
 //
 
+#include <unistd.h>
 #include "stdio.h"
 #include "stdlib.h"
 #include "gpiod.h"
+
 
 int main(void){
     // select the chip gpiochip0
@@ -23,7 +25,7 @@ int main(void){
         return EXIT_FAILURE;
     }
 
-    // blink the led
+    // blink the LED
     for (int i = 0; i < 10; i++) {
         gpiod_line_set_value(line, 1);
         sleep(1);
