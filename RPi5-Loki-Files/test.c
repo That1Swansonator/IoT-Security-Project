@@ -6,7 +6,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "gpiod.h"
-#include "gpiod.hpp"
 
 
 
