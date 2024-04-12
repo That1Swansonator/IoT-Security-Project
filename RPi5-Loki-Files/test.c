@@ -15,8 +15,8 @@ int main(void){
     struct gpiod_line *lineGreen;  // Green LED
 
 
-    // select the chip gpiochip0
-    chip = gpiod_chip_open("/dev/gpiochip0");
+    // select the chip gpiochip1
+    chip = gpiod_chip_open("/dev/gpiochip1");
 
     if (chip == NULL) {
         printf("Failed to open chip\n");
@@ -24,7 +24,7 @@ int main(void){
     }
 
     // get the line 17
-    lineGreen = gpiod_chip_get_line(chip, 17);
+    lineGreen = gpiod_chip_get_line(chip, 27);
 
     if (lineGreen == NULL) {
         printf("Failed to get line\n");
