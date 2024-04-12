@@ -18,9 +18,21 @@ int main(void){
     // select the chip gpiochip0
     chip = gpiod_chip_open("/dev/gpiochip0");
 
+    if (chip == NULL) {
+        printf("Failed to open chip\n");
+        return EXIT_FAILURE;
+    }
 
     // get the line 17
     lineGreen = gpiod_chip_get_line(chip, 17);
+
+    if (lineGreen == NULL) {
+        printf("Failed to get line\n");
+        gpiod_chip_close(chip);
+        return EXIT_FAILURE;
+    }
+
+    // request the line
     gpiod_line_request_output(lineGreen, "example1", 0);
 
     // blink the LED
