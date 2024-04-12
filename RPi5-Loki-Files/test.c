@@ -24,7 +24,7 @@ int main(void){
     }
 
     // get the line 17
-    lineGreen = gpiod_chip_get_line(chip, 27);
+    lineGreen = gpiod_chip_get_line(chip, 13);
 
     if (lineGreen == NULL) {
         printf("Failed to get line\n");
