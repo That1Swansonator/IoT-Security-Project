@@ -1,3 +1,6 @@
+#include <DHT.h>
+#include <DHT_U.h>
+
 void setup() {
     Serial.begin(9600);
 }
