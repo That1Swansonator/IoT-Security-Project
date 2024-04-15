@@ -14,4 +14,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Python 3.11 (IoT-Security-Project) interpreter library" level="application" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="versionSpecifier" value="Don't specify version" />
+  </component>
 </module>
