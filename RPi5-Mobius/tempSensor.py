@@ -15,6 +15,7 @@ if __name__ == '__main__':
         try:
             humidity, temperature = map(float, line.split(','))
             print(f"Humidity: {humidity}% Temperature: {temperature}°C")
+
         except ValueError as e:
             print(f"Error converting data to float: {e}")
         time.sleep(1)
