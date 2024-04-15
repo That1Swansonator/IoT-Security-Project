@@ -10,6 +10,11 @@ if __name__ == '__main__':
     # Send and receive data
     while True:
         line = ser.readline().decode('utf8').rstrip()  # read a '\n' terminated line
-        humidity, temperature = map(float, line.split(','))
-        print(f"Humidity: {humidity}% Temperature: {temperature}°C")
+        print(f"Received: {line}")  # print the received data
+
+        try:
+            humidity, temperature = map(float, line.split(','))
+            print(f"Humidity: {humidity}% Temperature: {temperature}°C")
+        except ValueError as e:
+            print(f"Error converting data to float: {e}")
         time.sleep(1)

@@ -6,5 +6,6 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(
         IoT_Security_Project
         RPi5-Loki-Files/test.c
+        RPi5-Mobius-Files/tempSensor.py
 
 )
