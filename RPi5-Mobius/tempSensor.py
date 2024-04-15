@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # Send and receive data
     while True:
         line = ser.readline().decode('utf8').rstrip()  # read a '\n' terminated line
-        print(f"Received: {line}")  # print the received data
+        # print(f"Received: {line}")  # print the received data
 
         try:
             humidity, temperature = map(float, line.split(','))
