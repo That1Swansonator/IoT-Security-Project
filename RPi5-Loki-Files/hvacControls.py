@@ -10,8 +10,8 @@ if __name__ == '__main__':
 
     # Send and receive data
     while True:
-        command = input("Enter command for HVAC (off, ac, hc): ")
-        ser.write(str(command)) # Send data over usb
+        command = str(input("Enter command for HVAC (off, ac, hc): "))
+        ser.write(command.encode()) # Send data over usb
         line = ser.readline().decode('utf-8').rstrip()
         print(line)
         time.sleep(1)
