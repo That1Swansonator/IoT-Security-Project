@@ -90,6 +90,7 @@ class tempSensor:
 
         # Insert data into table TempHistory
         query = f"INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('{avg_temp}', '{date}', '{time}')"
+        cursor.execute(query)
 
         # Close cursor and database
         cursor.close()
