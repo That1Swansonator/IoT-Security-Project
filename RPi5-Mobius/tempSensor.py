@@ -18,8 +18,8 @@ class tempSensor:
             line = self.ser.readline().decode('utf8').rstrip()  # read a '\n' terminated line
 
             try:
-                temperature = map(float, line.split(','))
-                print(f"Temperature: {temperature}°C")
+                humidity, temperature = map(float, line.split(','))
+                print(f"Humidity: {humidity}% Temperature: {temperature}°C")
 
             except ValueError as e:
                 print(f"Error converting data to float: {e}")
