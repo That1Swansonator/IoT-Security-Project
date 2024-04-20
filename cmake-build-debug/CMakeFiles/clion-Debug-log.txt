@@ -20,7 +20,7 @@ CMake Deprecation Warning:
 -- Check for working CXX compiler: C:/Users/patap/AppData/Local/Programs/CLion/bin/mingw/bin/g++.exe - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Configuring done (7.6s)
+-- Configuring done (6.4s)
 CMake Error at CMakeLists.txt:6 (add_executable):
   Cannot find source file:
 
