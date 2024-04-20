@@ -17,7 +17,7 @@ class tempSensor:
         avg_temp = self.dht11()
 
         # Save data to database
-        self.save_to_db(avg_temp)
+        self.save_to_db()
 
 
     def dht11(self):
@@ -44,6 +44,7 @@ class tempSensor:
 
         # Calculate the average temperature
         avg_temp = sum(temp_arr) / len(temp_arr)
+        print(f"Average temperature: {avg_temp}°C")
 
         # return the average temperature
         return avg_temp
