@@ -57,15 +57,19 @@ class tempSensor:
         try:
             # Get password from environment variable
             password = os.getenv('MY_PASSWORD')
+            print("Passed password")
 
             # get username from environment variable
             user = os.getenv('MY_USER')
+            print("Passed user")
 
             # get hostname from environment variable
             host = os.getenv('MY_HOST')
+            print("Passed host")
 
             # get database name from environment variable
             database = os.getenv('MY_DATABASE')
+            print("Passed database")
 
             # Connect to database
             db = mysql.connect(
