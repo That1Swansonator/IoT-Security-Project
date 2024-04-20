@@ -18,7 +18,7 @@ class tempSensor:
             line = self.ser.readline().decode('utf8').rstrip()  # read a '\n' terminated line
 
             try:
-                temperature = map(float, line)
+                temperature = map(float, line.split(','))
                 print(f"Temperature: {temperature}°C")
 
             except ValueError as e:
