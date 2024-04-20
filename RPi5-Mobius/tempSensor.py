@@ -61,19 +61,21 @@ class tempSensor:
 
             # get username from environment variable
             user = os.getenv('MY_USER')
-            print("Passed user: ", user)
+            print("User: ", user)
 
             # get hostname from environment variable
             host = os.getenv('MY_HOST')
-            print("Passed host")
+            print("Host: ", host)
 
             # get database name from environment variable
             database = os.getenv('MY_DATABASE')
-            print("Passed database")
+            print("Database: ", database)
 
             # Connect to database
             db = mysql.connect(
                 host=host, user=user, passwd=password, database=database)
+
+            print("Connected to database")
 
         except Exception as e:
             print(f"Error connecting to database: {e}")
