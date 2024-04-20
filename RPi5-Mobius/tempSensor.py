@@ -61,7 +61,7 @@ class tempSensor:
 
             # get username from environment variable
             user = os.getenv('MY_USER')
-            print("Passed user")
+            print("Passed user: ", user)
 
             # get hostname from environment variable
             host = os.getenv('MY_HOST')
