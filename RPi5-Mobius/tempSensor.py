@@ -59,8 +59,8 @@ class tempSensor:
         date = now.strftime('%Y-%m-%d')
         time = now.strftime('%H:%M:%S')
 
-        # Insert data into table
-        cursor.execute(f"insert into TempHistory (tempC, tempDate, tempTime) values (avg_temp, date, time)")
+        # Insert data into table TempHistory
+        query = f"INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('{avg_temp}', '{date}', '{time}')"
 
         # Close cursor and database
         cursor.close()
