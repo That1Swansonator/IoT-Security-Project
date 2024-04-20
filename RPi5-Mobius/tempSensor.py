@@ -12,21 +12,43 @@ class tempSensor:
         self.ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
         self.ser.reset_input_buffer()
 
-    def run(self):
-        # Send and receive data
-        while True:
+    def getData(self):
+        # call dht11 function to get data every 5 minutes
+        avg_temp = self.dht11()
+
+        # Save data to database
+        self.save_to_db(avg_temp)
+
+
+    def dht11(self):
+        # create an array to store 10 temperature values
+        temp_arr = []
+        # create a variable loopControl to control the loop
+        loopControl = 0
+
+        # Send and receive data. Default is True
+        while loopControl < 10:
             line = self.ser.readline().decode('utf8').rstrip()  # read a '\n' terminated line
 
             try:
                 humidity, temperature = map(float, line.split(','))
                 print(f"Humidity: {humidity}% Temperature: {temperature}°C")
+                temp_arr.append(temperature)
+
+                loopControl += 1
 
             except ValueError as e:
+                # This will catch twice at initialization and if the ground leeds are not connected
                 print(f"Error converting data to float: {e}")
             time.sleep(1)
 
-            # Save data to database
-            # self.save_to_db(temperature)
+        # Calculate the average temperature
+        avg_temp = sum(temp_arr) / len(temp_arr)
+
+        # return the average temperature
+        return avg_temp
+
+
     def close(self):
         self.ser.close()
 
@@ -69,4 +91,4 @@ class tempSensor:
 
 if __name__ == '__main__':
     sensor = tempSensor()
-    sensor.run()
+    sensor.getData()
