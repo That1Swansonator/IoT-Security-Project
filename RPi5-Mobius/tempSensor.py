@@ -44,6 +44,8 @@ class tempSensor:
 
         # Calculate the average temperature
         avg_temp = sum(temp_arr) / len(temp_arr)
+        avg_temp = round(avg_temp, 2)
+        # avg_temp = float(avg_temp)
         print(f"Average temperature: {avg_temp}°C")
 
         # return the average temperature
@@ -82,14 +84,16 @@ class tempSensor:
 
         # Create a cursor
         cursor = db.cursor()
+        print("Cursor created")
 
         # get the current date and time
         now = datetime.now()
         date = now.strftime('%Y-%m-%d')
         time = now.strftime('%H:%M:%S')
+        print("Date and Time Created")
 
         # Insert data into table TempHistory
-        query = f"INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('{avg_temp}', '{date}', '{time}')"
+        query = "INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('{avg_temp}', '{date}', '{time}')"
         cursor.execute(query)
 
         # Close cursor and database
