@@ -12,6 +12,12 @@ class tempSensor:
         self.ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
         self.ser.reset_input_buffer()
 
+    def scheduler(self):
+        # Run getData function every 5 minutes
+        while True:
+            self.getData()
+            time.sleep(300)
+
     def getData(self):
         # call dht11 function to get data every 5 minutes
         avg_temp = self.dht11()
@@ -113,4 +119,5 @@ class tempSensor:
 
 if __name__ == '__main__':
     sensor = tempSensor()
-    sensor.getData()
+    # sensor.getData()
+    sensor.scheduler()
