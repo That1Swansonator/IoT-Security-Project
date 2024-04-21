@@ -93,9 +93,12 @@ class tempSensor:
         time = now.strftime('%H:%M:%S')
         print("Date and Time Created")
 
-        # Insert data into table TempHistory
-        query = "INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('{avg_temp}', '{date}', '{time}')"
-        cursor.execute(query)
+        # Insert data into table TempHistory, columns: tempc, tempdate, temptime
+        query = "INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('%s', '%s', '%s')"
+        values = (avg_temp, date, time)
+        cursor.execute(query, values)
+
+        db.commit()
 
         # Close cursor and database
         cursor.close()
