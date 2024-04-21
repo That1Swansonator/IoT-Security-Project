@@ -95,7 +95,7 @@ class tempSensor:
 
         try:
             # Insert data into table TempHistory, columns: tempc, tempdate, temptime
-            query = "INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('%s', '%s', '%s')"
+            query = "INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES (%s, %s, %s)"
             values = (avg_temp, date, time)
             cursor.execute(query, values)
 
