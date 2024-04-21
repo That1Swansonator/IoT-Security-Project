@@ -17,7 +17,7 @@ class tempSensor:
         avg_temp = self.dht11()
 
         # Save data to database
-        self.save_to_db()
+        self.save_to_db(avg_temp)
 
 
     def dht11(self):
@@ -55,7 +55,7 @@ class tempSensor:
     def close(self):
         self.ser.close()
 
-    def save_to_db(avg_temp):
+    def save_to_db(self, avg_temp):
         try:
             # Get password from environment variable
             password = os.getenv('MY_PASSWORD')
