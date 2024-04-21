@@ -93,12 +93,18 @@ class tempSensor:
         time = now.strftime('%H:%M:%S')
         print("Date and Time Created")
 
-        # Insert data into table TempHistory, columns: tempc, tempdate, temptime
-        query = "INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('%s', '%s', '%s')"
-        values = (avg_temp, date, time)
-        cursor.execute(query, values)
+        try:
+            # Insert data into table TempHistory, columns: tempc, tempdate, temptime
+            query = "INSERT INTO TempHistory (tempc, tempdate, temptime) VALUES ('%s', '%s', '%s')"
+            values = (avg_temp, date, time)
+            cursor.execute(query, values)
 
-        db.commit()
+            db.commit()
+
+        except Exception as e:
+            print(f"Error inserting data into database: {e}")
+            db.rollback()
+            exit()
 
         # Close cursor and database
         cursor.close()
