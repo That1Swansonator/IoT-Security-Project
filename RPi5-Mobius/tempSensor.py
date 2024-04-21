@@ -106,6 +106,7 @@ class tempSensor:
             cursor.execute(query, values)
 
             db.commit()
+            print(f"Data inserted into database: {avg_temp}°C, {date}, {time}")
 
         except Exception as e:
             print(f"Error inserting data into database: {e}")
