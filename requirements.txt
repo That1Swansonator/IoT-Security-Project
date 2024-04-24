@@ -1,2 +1,3 @@
 setuptools
 serial
+mysql-connector-python

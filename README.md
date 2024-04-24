@@ -1,7 +1,11 @@
 My primary goal is to create a secure and bespoke IoT network based on the three-layer approach using three security methods.
 
-A bash file will; be made as a sort of installer.
-rm /usr/lib/python3.11/EXTERNALLY-MANAGED for removing the PIP installation roadblock
+To auto install the required packages for Ubuntu Server 23.10, run the following command:
+chmod +x Linux-Install.sh
+./Linux-Install.sh
+
+For Windows, run the following command:
+Windows-Install.ps1
 
 
 
