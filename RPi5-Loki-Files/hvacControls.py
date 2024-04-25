@@ -9,30 +9,20 @@ class HVACControls:
         self.ser.reset_input_buffer()
         self.command = "off"
 
-    # set up network socket to recieve command from server
-    def recieveCommand(self):
-        # open a socket to listen for commands
+    # Ask User to set a goal temperature
+    def setGoalTemp(self):
+        goalTemp = float(input("Enter goal temperature: "))
+        return goalTemp
+
+    # Recieve the current temperature from server at 192.168.1.30 port 1234
+    def recieveTemp(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind((socket.gethostname(), 1234))
-        s.listen(5)
-        clientsocket, address = s.accept()
-        print(f"Connection from {address} has been established.")
-        while True:
-            # recieve command from server
-            command = clientsocket.recv(1024)
+        s.connect(('192.168.1.30', 1234))
+        temp = s.recv(1024).decode()
+        s.close()
+        return temp
 
-            if not command:
-                break
-
-            print(command.decode())
-
-            # send command to arduino
-            self.sendCommand(command.decode())
-
-            # send response to server
-            clientsocket.send(bytes("Command recieved", "utf-8"))
-
-
+    # send command to arduino
     def sendCommand(self, command):
         self.ser.write(command.encode())
         line = self.ser.readline().decode('utf-8').rstrip()
@@ -41,20 +31,27 @@ class HVACControls:
     def closeSerial(self):
         self.ser.close()
 
+    def run(self):
+        while True:
+            goalTemp = float(self.setGoalTemp())
+            currentTemp = float(self.recieveTemp())
+            print(f"Goal Temp: {goalTemp}, Current Temp: {currentTemp}")
+
+            if currentTemp < goalTemp:
+                command = "ac"
+            elif currentTemp > goalTemp:
+                command = "hc"
+            else:
+                command = "off"
+
+            self.sendCommand(command)
+            time.sleep(1)
+            print("Command sent to HVAC")
+
+            #wait 5 minutes
+            time.sleep(300)
+
 if __name__ == '__main__':
     hvac = HVACControls()
-    # hvac.sendCommand("ac")
-    hvac.recieveCommand()
+    hvac.run()
 
-    # Open serial port
-    # ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-    # ser.reset_input_buffer()
-    # command = "off"
-    #
-    # # Send and receive data
-    # while True:
-    #     command = str(input("Enter command for HVAC (off, ac, hc): "))
-    #     ser.write(command.encode()) # Send data over usb
-    #     line = ser.readline().decode('utf-8').rstrip()
-    #     print(line)
-    #     time.sleep(1)

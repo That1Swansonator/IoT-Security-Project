@@ -1,6 +1,6 @@
 import socket
 import time
-import mysql.connector
+import mysql.connector as mysql
 import os
 
 # Create a class ochestrator to get the latest data from the database and send it to the RPi
@@ -36,3 +36,40 @@ class Orchestrator:
         except Exception as e:
             print(f"Error connecting to database: {e}")
             exit()
+
+        # Create a cursor
+        cursor = db.cursor()
+        print("Cursor created")
+
+        # Get the latest data from the database
+        cursor.execute("SELECT tempC FROM TempHistory ORDER BY tempTime DESC LIMIT 1")
+        temp = cursor.fetchone()
+        print("Data fetched from database", temp)
+
+        return temp
+
+    # Send the temperature to the RPi at the specified IP address and port
+    def sendTemp(self, temp):
+        # Create a socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # Connect to the RPi
+        s.connect(('192.168.1.90', 1234))
+
+        # Send the temperature
+        s.sendall(str(temp[0]).encode())
+        print("Temperature sent to RPi")
+
+        # Close the socket
+        s.close()
+
+    # Run the orchestrator every 5 minutes
+    def run(self):
+        while True:
+            temp = self.getLatestData()
+            self.sendTemp(temp)
+            time.sleep(300)
+
+if __name__ == '__main__':
+    orchestrator = Orchestrator()
+    orchestrator.run()
