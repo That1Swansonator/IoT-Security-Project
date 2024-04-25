@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import serial
 import time
-import socket
+import mysql.connector as mysql
+import os
 
 class HVACControls:
     def __init__(self):
@@ -15,21 +16,44 @@ class HVACControls:
         return goalTemp
 
     # Recieve the current temperature from server at 192.168.1.30 port 1234
-    def recieveTemp(self):
-        loop = True
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    def getLatestData(self):
+        # Connect to the database
+        try:
+            # Get password from environment variable
+            password = os.getenv('MY_PASSWORD')
+            print("Passed password")
 
-        while loop:
-            try:
-                s.connect(('192.168.1.30', 1234))
-                temp = s.recv(1024).decode()
-                loop = False
+            # get username from environment variable
+            user = os.getenv('MY_USER')
+            print("User: ", user)
 
-            except Exception as e:
-                print(f"Error connecting to server: {e}")
+            # get hostname from environment variable
+            host = os.getenv('MY_HOST')
+            print("Host: ", host)
 
+            # get database name from environment variable
+            database = os.getenv('MY_DATABASE')
+            print("Database: ", database)
 
-        s.close()
+            # Connect to database
+            db = mysql.connect(
+                host=host, user=user, passwd=password, database=database)
+
+            print("Connected to database")
+
+        except Exception as e:
+            print(f"Error connecting to database: {e}")
+            exit()
+
+        # Create a cursor
+        cursor = db.cursor()
+        print("Cursor created")
+
+        # Get the latest data from the database
+        cursor.execute("SELECT tempC FROM TempHistory ORDER BY tempTime DESC LIMIT 1")
+        temp = cursor.fetchone()
+        print("Data fetched from database", temp)
+
         return temp
 
     # send command to arduino
@@ -44,7 +68,7 @@ class HVACControls:
     def run(self):
         while True:
             goalTemp = float(self.setGoalTemp())
-            currentTemp = float(self.recieveTemp())
+            currentTemp = float(self.getLatestData)
             print(f"Goal Temp: {goalTemp}, Current Temp: {currentTemp}")
 
             if currentTemp < goalTemp:
