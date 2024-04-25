@@ -19,7 +19,7 @@ class HVACControls:
         loop = True
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        while loop
+        while loop:
             try:
                 s.connect(('192.168.1.30', 1234))
                 temp = s.recv(1024).decode()
