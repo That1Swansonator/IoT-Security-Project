@@ -74,9 +74,10 @@ class HVACControls:
             print(f"Goal Temp: {goalTemp}, Current Temp: {currentTemp}")
 
             if currentTemp < goalTemp:
-                command = "ac"
-            elif currentTemp > goalTemp:
                 command = "hc"
+
+            elif currentTemp > goalTemp:
+                command = "ac"
             else:
                 command = "off"
 
