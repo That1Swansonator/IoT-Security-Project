@@ -13,10 +13,10 @@ class tempSensor:
         self.ser.reset_input_buffer()
 
     def scheduler(self):
-        # Run getData function every 5 minutes
+        # Run getData function every 3 minutes
         while True:
             self.getData()
-            time.sleep(300)
+            time.sleep(180)
 
     def getData(self):
         # call dht11 function to get data every 5 minutes

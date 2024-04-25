@@ -85,8 +85,9 @@ class HVACControls:
             time.sleep(1)
             print("Command sent to HVAC")
 
-            #wait 5 minutes
-            time.sleep(300)
+            #wait 3.5 minutes
+            time.sleep(210)
+
 
 if __name__ == '__main__':
     hvac = HVACControls()
