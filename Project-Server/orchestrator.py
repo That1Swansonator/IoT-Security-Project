@@ -50,15 +50,24 @@ class Orchestrator:
 
     # Send the temperature to the RPi at the specified IP address and port
     def sendTemp(self, temp):
+        loop = True
+
         # Create a socket
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # Connect to the RPi
-        s.connect(('192.168.1.73', 1234))
+        while loop:
+            try:
+                # Connect to the RPi
+                s.connect(('192.168.1.73', 1234))
 
-        # Send the temperature
-        s.sendall(str(temp[0]).encode())
-        print("Temperature sent to RPi")
+                # Send the temperature
+                s.sendall(str(temp[0]).encode())
+                print("Temperature sent to RPi")
+                loop = False
+
+            except Exception as e:
+                print(f"Error connecting to RPi: {e}")
+                # exit()
 
         # Close the socket
         s.close()

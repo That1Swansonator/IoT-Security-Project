@@ -16,9 +16,19 @@ class HVACControls:
 
     # Recieve the current temperature from server at 192.168.1.30 port 1234
     def recieveTemp(self):
+        loop = True
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect(('192.168.1.30', 1234))
-        temp = s.recv(1024).decode()
+
+        while loop
+            try:
+                s.connect(('192.168.1.30', 1234))
+                temp = s.recv(1024).decode()
+                loop = False
+
+            except Exception as e:
+                print(f"Error connecting to server: {e}")
+
+
         s.close()
         return temp
 
