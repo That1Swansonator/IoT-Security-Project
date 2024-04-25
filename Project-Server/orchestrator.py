@@ -54,7 +54,7 @@ class Orchestrator:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # Connect to the RPi
-        s.connect(('192.168.1.90', 1234))
+        s.connect(('192.168.1.73', 1234))
 
         # Send the temperature
         s.sendall(str(temp[0]).encode())
