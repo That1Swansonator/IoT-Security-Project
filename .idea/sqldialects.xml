@@ -3,7 +3,6 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/Project-Server/MySQL/InitTempHistory.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/Project-Server/MySQL/tempHistory.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/Project-Server/orchestrator.py" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/RPi5-Loki-Files/hvacControls.py" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/RPi5-Mobius/tempSensor.py" dialect="MySQL" />
   </component>

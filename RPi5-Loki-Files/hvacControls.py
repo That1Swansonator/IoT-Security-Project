@@ -68,7 +68,9 @@ class HVACControls:
     def run(self):
         while True:
             goalTemp = float(self.setGoalTemp())
-            currentTemp = float(self.getLatestData)
+            temp = self.getLatestData()
+            currentTemp = float(temp[0])
+
             print(f"Goal Temp: {goalTemp}, Current Temp: {currentTemp}")
 
             if currentTemp < goalTemp:
