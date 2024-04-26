@@ -66,8 +66,9 @@ class HVACControls:
         self.ser.close()
 
     def run(self):
+        goalTemp = self.setGoalTemp()
+
         while True:
-            goalTemp = float(self.setGoalTemp())
             temp = self.getLatestData()
             currentTemp = float(temp[0])
 
