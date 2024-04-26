@@ -50,7 +50,7 @@ class HVACControls:
         print("Cursor created")
 
         # Get the latest data from the database
-        cursor.execute("SELECT tempC FROM TempHistory ORDER BY tempTime DESC LIMIT 1")
+        cursor.execute("SELECT tempC FROM TempHistory ORDER BY tempID DESC LIMIT 1")
         temp = cursor.fetchone()
         print("Data fetched from database", temp)
 
