@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
-from datetime import datetime
 
+# tempSensor libraries
 import serial
 import time
 import mysql.connector as mysql
 import os
+from datetime import datetime
+
+# key_exchange libraries
+from tinyec import registry
+import secrets
+from Crypto.Cipher import AES
+import hashlib, secrets, binascii
+import socket
+
 
 class tempSensor:
     def __init__(self):
