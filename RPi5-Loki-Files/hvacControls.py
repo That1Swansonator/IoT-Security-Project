@@ -4,6 +4,8 @@ import time
 import mysql.connector as mysql
 import os
 
+import comms
+
 class HVACControls:
     def __init__(self):
         self.ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
