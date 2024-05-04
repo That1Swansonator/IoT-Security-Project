@@ -10,6 +10,7 @@ from datetime import datetime
 import ecdh
 
 
+
 class tempSensor:
     def __init__(self):
         # Open serial port
@@ -64,6 +65,12 @@ class tempSensor:
 
     def close(self):
         self.ser.close()
+
+    def send_to_server(self):
+        encryption = ecdh
+        shared_secret = encryption.key_exchange()
+
+
 
     def save_to_db(self, avg_temp):
         try:

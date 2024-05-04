@@ -4,76 +4,116 @@ from Crypto.Cipher import AES
 import hashlib, secrets, binascii
 import socket
 
-global psk
+# Create a global variable psk that contains a key saved in psk.txt
+def get_psk():
+    with open('psk.txt', 'r') as f:
+        psk = f.read()
+    return psk
 
-class communications:
-    # This class is used to handle all communications between the server and the client
-    # It is used to encrypt and decrypt messages and to manage the OTP distribution
+psk = get_psk()
 
-    def key_exchange(self):
-        # Step 1: Generate keys
-        privKey, pubKey = self.generate_key_pair(self.get_curve())
-        
+# Main Functions
+def main():
+    # If Client
+    # msg = "!START 5051"
+    # encryptedMsg = encrypt_AES_GCM(msg, psk)
 
-        # Step 2: Send public key
-        self.send_key(self.compress(pubKey))
-
-        # Step 3: Receive public key
-        client_pubKey = self.receive_key()
-
-        # Step 4: Compute shared secret
-        shared_secret = self.compute_shared_secret(privKey, client_pubKey)
-
-        return shared_secret
-
-    # This method is used to generate a key pair for the device this is running on
-    def generate_key_pair(self, curve):
-        privKey = secrets.randbelow(curve.field.n)
-        pubKey = privKey * curve.g
-        return privKey, pubKey
-
-    def compute_shared_secret(self, privKey, pubKey):
-        shared_secret = privKey * pubKey
-
-        # Hash the shared secret to get a 256-bit key
-        shared_secret = hashlib.sha256(int.to_bytes(shared_secret, length=32, byteorder='big')).digest()
-
-        return shared_secret
-
-
-    # This method is used to send a key to the client
-    def send_key(self, pub_key):
-        # Send the key to the client using the socket
-        HOST = "192.168.1.X"  # The server's hostname or IP address
-        PORT = 65432  # The port used by the server
-
-        # Create a socket object
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((HOST, PORT))
-            s.sendall(b"Hello, world")
-
-            data = s.recv(1024)
-
-        print(f"Received {data!r}")
-
-
-    def compress(pubKey):
-        return hex(pubKey.x) + hex(pubKey.y % 2)[2:]
-
-    def get_curve(self):
-        secret = secrets.randbelow(100)
-        print(secret)
-
-        curve = registry.get_curve('brainpoolP256r1')
-        return curve
-
-class OTP:
-    def __init__(self, key):
-        self.key = key
+    # If Server
+    server()
 
 
 
 
+# Encryption and Decryption Functions
+def encrypt_AES_GCM(msg, key):
+    aesCipher = AES.new(key, AES.MODE_GCM)
+    ciphertext, authTag = aesCipher.encrypt_and_digest(msg)
+    return (ciphertext, aesCipher.nonce, authTag)
 
-        
+def decrypt_AES_GCM(encryptedMsg, key):
+    (ciphertext, nonce, authTag) = encryptedMsg
+    aesCipher = AES.new(key, AES.MODE_GCM, nonce)
+    plaintext = aesCipher.decrypt_and_verify(ciphertext, authTag)
+    return plaintext
 
+# Clientside Communications
+
+
+# Serverside communications
+# d_port is the port that the server will listen on. Can be called recursively.
+def server(d_port):
+    header= 64
+    port = d_port
+    server = socket.gethostbyname(socket.gethostname())
+    address = (server, port)
+    FORMAT = 'utf-8'
+    disconnect_msg = "!Disconnect"
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind(address)
+
+    def handle_client(conn, address):
+        print(f"[NEW CONNECTION] {address} connected")
+
+        connected = True
+        while connected:
+            msg_lenght = conn.recv(header).decode(FORMAT)
+
+            if msg_lenght:
+                msg_lenght = int(msg_lenght)
+                msg = conn.recv(msg_lenght).decode(FORMAT)
+
+                if msg == disconnect_msg:
+                    connected = False
+
+                print(f"[{address}] {msg}")
+                conn.send("Msg Recieved".encode(FORMAT))
+
+        conn.close()
+
+    def msg_interpreter(msg):
+        msg = decrypt_AES_GCM(msg, psk)
+
+        if msg == "!START 5051":
+            print("Starting Server")
+            start()
+        else:
+            print("Invalid Command")
+
+    def start():
+        server.listen()
+        print(f"[LISTENING] Server is listening on {server}")
+
+        while True:
+            conn, address = server.accept()
+            thread = threading.Thread(target=handle_client, args=(conn, address))
+            thread.start()
+            print(f"[ACTIVE CONNECTIONS] {threading.active_count()-1}")
+
+    print("[STARTING] server is starting")
+    start()
+
+def client():
+    header= 64
+    port = 5050
+    FORMAT = 'utf-8'
+    disconnect_msg = "!Disconnect"
+    server = "192.168.1.59"
+    address = (server, port)
+
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect(address)
+
+    def send(msg):
+        message = msg.encode(FORMAT)
+        msg_len = len(message)
+
+        send_len = str(msg_len).encode(FORMAT)
+        send_len += b' ' * (header - len(send_len))
+
+        client.send(send_len)
+        client.send(message)
+        print(client.recv(2048).decode())
+
+if __name__ == '__main__':
+    main()
