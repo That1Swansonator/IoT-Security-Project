@@ -7,6 +7,8 @@ import ecdh_key_exchange
 import threading
 import pyotp
 
+import ecc_example
+
 # If running as a server, import the hvacControls module
 # import hvacControls
 
@@ -24,16 +26,18 @@ default_port = 5050
 
 # Main Functions
 def main():
-    # ask user to set up as client or server
-    mode = input("Client or Server? ")
+    # # ask user to set up as client or server
+    # mode = input("Client or Server? ")
+    #
+    # if mode == "Client":
+    #     # msg = "!START 5051"
+    #     # encryptedMsg = encrypt_AES_GCM
+    #     pass
+    #
+    # if mode == "Server":
+    #     server(default_port)
 
-    if mode == "Client":
-        # msg = "!START 5051"
-        # encryptedMsg = encrypt_AES_GCM
-        pass
-
-    if mode == "Server":
-        server(default_port)
+    ec = ecc_example
 
 
 # Encryption and Decryption Functions
