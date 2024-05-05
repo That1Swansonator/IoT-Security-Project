@@ -3,11 +3,10 @@ import secrets
 from Crypto.Cipher import AES
 import hashlib, secrets, binascii
 import socket
-import ecdh_key_exchange
 import threading
 import pyotp
 
-import ecc_example
+import ecc_example as ecc
 
 # If running as a server, import the hvacControls module
 # import hvacControls
@@ -26,33 +25,15 @@ default_port = 5050
 
 # Main Functions
 def main():
-    # # ask user to set up as client or server
-    # mode = input("Client or Server? ")
-    #
-    # if mode == "Client":
-    #     # msg = "!START 5051"
-    #     # encryptedMsg = encrypt_AES_GCM
-    #     pass
-    #
-    # if mode == "Server":
-    #     server(default_port)
-
-    ec = ecc_example
+   pass
 
 
-# Encryption and Decryption Functions
-def encrypt_AES_GCM(msg, key):
-    aesCipher = AES.new(key, AES.MODE_GCM)
-    ciphertext, authTag = aesCipher.encrypt_and_digest(msg)
-    return (ciphertext, aesCipher.nonce, authTag)
-
-def decrypt_AES_GCM(encryptedMsg, key):
-    (ciphertext, nonce, authTag) = encryptedMsg
-    aesCipher = AES.new(key, AES.MODE_GCM, nonce)
-    plaintext = aesCipher.decrypt_and_verify(ciphertext, authTag)
-    return plaintext
+# Encryption and Decryption Function
+# call ecc_example for these functions
 
 # Clientside Communications
+def client(d_port):
+    pass
 
 
 # Serverside communications

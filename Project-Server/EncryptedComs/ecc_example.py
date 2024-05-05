@@ -54,7 +54,6 @@ def compute_shared_secret(privKey, pubKey):
 
     # Hash the shared secret to get a 256-bit key
     shared_secret = hashlib.sha256(int.to_bytes(shared_secret, length=32, byteorder='big')).digest()
-
     return shared_secret
 
 
