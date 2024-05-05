@@ -3,6 +3,15 @@ import secrets
 from Crypto.Cipher import AES
 import hashlib, secrets, binascii
 import socket
+import ecdh_key_exchange
+import threading
+import pyotp
+
+# If running as a server, import the hvacControls module
+# import hvacControls
+
+# If running as a client, this file will be imported by tempSensor.py
+
 
 # Create a global variable psk that contains a key saved in psk.txt
 def get_psk():
@@ -11,17 +20,20 @@ def get_psk():
     return psk
 
 psk = get_psk()
+default_port = 5050
 
 # Main Functions
 def main():
-    # If Client
-    # msg = "!START 5051"
-    # encryptedMsg = encrypt_AES_GCM(msg, psk)
+    # ask user to set up as client or server
+    mode = input("Client or Server? ")
 
-    # If Server
-    server()
+    if mode == "Client":
+        # msg = "!START 5051"
+        # encryptedMsg = encrypt_AES_GCM
+        pass
 
-
+    if mode == "Server":
+        server(default_port)
 
 
 # Encryption and Decryption Functions
@@ -73,10 +85,20 @@ def server(d_port):
 
     def msg_interpreter(msg):
         msg = decrypt_AES_GCM(msg, psk)
+        # slip the message into a command and an argument on the : character
+        cmd, arg = msg.split(":")
 
-        if msg == "!START 5051":
-            print("Starting Server")
-            start()
+        if cmd == "!START":
+            print(f"Starting Server at port {arg}")
+            server(arg)
+
+        if cmd == "!TEMP":
+            pass
+
+        if cmd == "!END":
+            print("Ending Server")
+            server.close()
+
         else:
             print("Invalid Command")
 

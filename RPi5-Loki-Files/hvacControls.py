@@ -14,10 +14,12 @@ class HVACControls:
 
     # Ask User to set a goal temperature
     def setGoalTemp(self):
-        goalTemp = float(input("Enter goal temperature: "))
+        # goalTemp = float(input("Enter goal temperature: "))
+        # Get goal temperature from environment variable
+        goalTemp = os.getenv('GOAL_TEMP')
         return goalTemp
 
-    # Recieve the current temperature from server at 192.168.1.30 port 1234
+    # Deprecated
     def getLatestData(self):
         # Connect to the database
         try:
@@ -89,8 +91,6 @@ class HVACControls:
             time.sleep(1)
             print("Command sent to HVAC")
 
-            #wait 3.5 minutes
-            time.sleep(210)
 
 
 if __name__ == '__main__':
