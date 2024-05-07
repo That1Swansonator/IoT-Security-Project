@@ -5,37 +5,25 @@ import hashlib, secrets, binascii
 import socket
 import threading
 import os
+import ecc
+import hvacControls
 
-import ecc_example as ecc
+# IMPORTANT: This file will use a protocol format for messages. The format is as follows:
+# ![COMMAND]:[ARGUMENT]
 
-
-# If running as a server, import the hvacControls module
-# import hvacControls
-
-# If running as a client, this file will be imported by tempSensor.py
-
-
+# Deprecated.
 # Create a global variable psk that contains a key saved in psk.txt
-def get_psk():
-    with open('psk.txt', 'r') as f:
-        psk = f.read()
-    return psk
+# def get_psk():
+#     with open('psk.txt', 'r') as f:
+#         psk = f.read()
+#     return psk
 
-
-psk = get_psk()
+# psk = get_psk()
 default_port = 5050
-
-
-# Main Functions
-def main():
-    serverside()
-
-
 header = 64
 port = 5050
 FORMAT = 'utf-8'
 disconnect_msg = "!Disconnect"
-
 
 # Clientside Communications. Run this function to connect to a server. Runs once per call
 def clientside(message, d_port=port):
@@ -108,35 +96,15 @@ def serverside(d_port=port, end=False):
     start()
 
 
-def client():
-    header = 64
-    FORMAT = 'utf-8'
-    disconnect_msg = "!Disconnect"
-    server = "192.168.1.59"
-    address = (server, port)
-
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(address)
-
-    def send(msg):
-        message = msg.encode(FORMAT)
-        msg_len = len(message)
-
-        send_len = str(msg_len).encode(FORMAT)
-        send_len += b' ' * (header - len(send_len))
-
-        client.send(send_len)
-        client.send(message)
-        print(client.recv(2048).decode())
-
-
 def msg_interpreter(msg):
-    msg = ecc.decrypt_ECC(msg, psk)
+    # IMPORTANT: This file will use a protocol format for messages. The format is as follows:
+    # ![COMMAND]:[ARGUMENT]
+    # The command cannot contain any spaces nor be encrypted. The argument can be encrypted
 
     # split the message into a command and an argument on the : character. Might add more splitting later
     cmd, arg = msg.split(":")
 
-    # Start the key exchange process. The argument is the public key of the incoming client
+    # Start the Key Exchange Process. The argument is the public key of the incoming client
     if cmd == "!KEP":
         clientside()
 

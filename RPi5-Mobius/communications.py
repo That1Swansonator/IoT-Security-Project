@@ -6,7 +6,8 @@ import socket
 import threading
 import os
 
-import ecc_example as ecc
+import ecc
+import tempSensor
 
 
 # If running as a server, import the hvacControls module
