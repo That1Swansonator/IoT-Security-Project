@@ -26,7 +26,15 @@ default_port = 5050
 
 # Main Functions
 def main():
-    serverside()
+    # start key exchange process
+    clientside("!KEP", ecc.compress(public_key), "False")
+    shared_key = ecc.compute_shared_secret(private_key, other_public_key)
+
+    # securely send the private key to the other party
+    # Encrypt the private key using the shared key
+    # encrypted_private_key = ecc.
+    # clientside("!PKE", )
+
 
 
 header = 64
@@ -36,7 +44,7 @@ disconnect_msg = "!Disconnect"
 
 
 # Clientside Communications. Run this function to connect to a server. Runs once per call
-def clientside(message, d_port=port):
+def clientside(command, argument, encryption_status, d_port=port):
     # Get a name  from environment variable
     server = os.getenv('DESTINATION_SERVER')
     address = (server, d_port)
@@ -45,18 +53,27 @@ def clientside(message, d_port=port):
     client.connect(address)
 
     def send(msg):
+        header = command.encode(FORMAT)
         message = msg.encode(FORMAT)
-        msg_len = len(message)
+        encrypt = encryption_status.encode(FORMAT)
 
-        send_len = str(msg_len).encode(FORMAT)
+        hed_len = len(header)
+        msg_len = len(message)
+        ens_len = len(encrypt)
+
+        send_len = str(hed_len+msg_len+ens_len).encode(FORMAT)
         send_len += b' ' * (header - len(send_len))
 
         client.send(send_len)
-        client.send(message)
+
+        # If this does not work, send the items separately
+        client.send(header, message, encrypt)
         print(client.recv(2048).decode())
 
-    send(message)
+        if command == "!KEP":
+            other_public_key = client.recv(2048).decode()
 
+    send(argument)
 
 # Serverside communications
 def serverside(d_port=port, end=False):
@@ -106,38 +123,18 @@ def serverside(d_port=port, end=False):
     start()
 
 
-def client():
-    header = 64
-    FORMAT = 'utf-8'
-    disconnect_msg = "!Disconnect"
-    server = "192.168.1.59"
-    address = (server, port)
+def msg_interpreter(cmd, arg, encryption_status):
+    # If the encryption status is true, decrypt the message. Decrypt using the shared key
+    if encryption_status:
+        # Decrypt the message
+        pass
 
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(address)
-
-    def send(msg):
-        message = msg.encode(FORMAT)
-        msg_len = len(message)
-
-        send_len = str(msg_len).encode(FORMAT)
-        send_len += b' ' * (header - len(send_len))
-
-        client.send(send_len)
-        client.send(message)
-        print(client.recv(2048).decode())
-
-
-def msg_interpreter(msg):
-    msg = ecc.decrypt_ECC(msg, psk)
-
-    # split the message into a command and an argument on the : character. Might add more splitting later
-    cmd, arg = msg.split(":")
 
     # Start the key exchange process. The argument is the public key of the incoming client
-    if cmd == "!KEP":
-        clientside()
+    # if cmd == "!KEP":
+    #     clientside()
 
+    # Start new server instance
     if cmd == "!NE":
         # Create a new instance of the server at a different port if needed and
         # kills the instance after running

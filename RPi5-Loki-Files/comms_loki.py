@@ -25,7 +25,7 @@ FORMAT = 'utf-8'
 disconnect_msg = "!Disconnect"
 
 # Clientside Communications. Run this function to connect to a server. Runs once per call
-def clientside(message, d_port=port):
+def clientside(header, message, d_port=port):
     # Get a name  from environment variable
     server = os.getenv('DESTINATION_SERVER')
     address = (server, d_port)
@@ -64,7 +64,9 @@ def serverside(d_port=port, end=False):
 
             if msg_lenght:
                 msg_lenght = int(msg_lenght)
-                msg = conn.recv(msg_lenght).decode(FORMAT)
+
+                # If this does not work, send the items separately
+                cmd, msg, ecs = conn.recv(msg_lenght).decode(FORMAT)
 
                 if msg == disconnect_msg:
                     connected = False
@@ -72,12 +74,19 @@ def serverside(d_port=port, end=False):
                 print(f"[{address}] {msg}")
                 conn.send("!RECIEVED".encode(FORMAT))
 
-                if end:
+                # If the message is a command !KEP, send back the public key of the server
+                if cmd == "!KEP":
+                    # Generate a public key and send it back to the client
+                    compressed_public_key = ecc.compress(public_key)
+                    conn.send(compressed_public_key.encode(FORMAT))
+
+                if end or cmd == "!END":
                     #kill the server
                     server.close()
-                    msg_interpreter(msg)
 
-                msg_interpreter(msg)
+                else:
+                    msg_interpreter(cmd, msg, ecs)
+
 
         conn.close()
 
@@ -95,23 +104,21 @@ def serverside(d_port=port, end=False):
     start()
 
 
-def msg_interpreter(msg):
-    # IMPORTANT: This file will use a protocol format for messages. The format is as follows:
-    # ![COMMAND]:[ARGUMENT]
-    # The command cannot contain any spaces nor be encrypted. The argument can be encrypted
+def msg_interpreter(cmd, arg, encryption_status):
+    # If the encryption status is true, decrypt the message. Decrypt using the shared key
+    if encryption_status:
+        # Decrypt the message
+        pass
 
-    # split the message into a command and an argument on the : character. Might add more splitting later
-    cmd, arg = msg.split(":")
+    # Start the key exchange process. The argument is the public key of the incoming client
+    # if cmd == "!KEP":
+    #     clientside()
 
-    # Start the Key Exchange Process. The argument is the public key of the incoming client
-    if cmd == "!KEP":
-        clientside()
-
+    # Start new server instance
     if cmd == "!NE":
         # Create a new instance of the server at a different port if needed and
         # kills the instance after running
         serverside(arg, True)
-
 
     if cmd == "!TEMP":
         pass
