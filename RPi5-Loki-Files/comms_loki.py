@@ -11,14 +11,13 @@ import hvacControls
 # IMPORTANT: This file will use a protocol format for messages. The format is as follows:
 # ![COMMAND]:[ARGUMENT]
 
-# Deprecated.
-# Create a global variable psk that contains a key saved in psk.txt
-# def get_psk():
-#     with open('psk.txt', 'r') as f:
-#         psk = f.read()
-#     return psk
+# The key bay
+private_key = ecc.generate_private_key()
+public_key = ecc.generate_public_key(private_key)
+shared_key = None
+other_public_key = None
+other_private_key = None
 
-# psk = get_psk()
 default_port = 5050
 header = 64
 port = 5050

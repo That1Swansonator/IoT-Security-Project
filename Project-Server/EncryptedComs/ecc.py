@@ -31,8 +31,6 @@ def generate_private_key():
     privKey = secrets.randbelow(curve.field.n)
     return privKey
 
-
-
 def compute_shared_secret(privKey, pubKey):
     shared_secret = privKey * pubKey
 
