@@ -23,10 +23,15 @@ def compress(pubKey):
     return hex(pubKey.x) + hex(pubKey.y % 2)[2:]
 
 # For Asymmetrical Encryption
-def generate_key_pair(curve):
-    privKey = secrets.randbelow(curve.field.n)
+def generate_public_key(privKey):
     pubKey = privKey * curve.g
     return privKey, pubKey
+
+def generate_private_key():
+    privKey = secrets.randbelow(curve.field.n)
+    return privKey
+
+
 
 def compute_shared_secret(privKey, pubKey):
     shared_secret = privKey * pubKey

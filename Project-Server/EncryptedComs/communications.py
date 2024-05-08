@@ -6,23 +6,15 @@ import socket
 import threading
 import os
 
-import ecc_example as ecc
+import ecc
 
+# The key bay
+private_key = ecc.generate_private_key()
+public_key = ecc.generate_public_key(private_key)
+shared_key = None
+other_public_key = None
+other_private_key = None
 
-# If running as a server, import the hvacControls module
-# import hvacControls
-
-# If running as a client, this file will be imported by tempSensor.py
-
-
-# Create a global variable psk that contains a key saved in psk.txt
-def get_psk():
-    with open('psk.txt', 'r') as f:
-        psk = f.read()
-    return psk
-
-
-psk = get_psk()
 default_port = 5050
 
 
@@ -90,7 +82,7 @@ def serverside(d_port=port, end=False):
 
                 if cmd == "!KEP":
                     # Generate a public key and send it back to the client
-                    public_key = ecc.generate_public_key()
+                    public_key = ecc.generate_public_key(private_key)
                     conn.send(public_key.encode(FORMAT))
 
                 if end or cmd == "!END":
