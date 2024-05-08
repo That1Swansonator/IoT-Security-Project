@@ -25,7 +25,7 @@ FORMAT = 'utf-8'
 disconnect_msg = "!Disconnect"
 
 # Clientside Communications. Run this function to connect to a server. Runs once per call
-def clientside(header, message, d_port=port):
+def clientside(command, argument, encryption_status, d_port=port):
     # Get a name  from environment variable
     server = os.getenv('DESTINATION_SERVER')
     address = (server, d_port)
@@ -34,17 +34,27 @@ def clientside(header, message, d_port=port):
     client.connect(address)
 
     def send(msg):
+        header = command.encode(FORMAT)
         message = msg.encode(FORMAT)
-        msg_len = len(message)
+        encrypt = encryption_status.encode(FORMAT)
 
-        send_len = str(msg_len).encode(FORMAT)
+        hed_len = len(header)
+        msg_len = len(message)
+        ens_len = len(encrypt)
+
+        send_len = str(hed_len+msg_len+ens_len).encode(FORMAT)
         send_len += b' ' * (header - len(send_len))
 
         client.send(send_len)
-        client.send(message)
+
+        # If this does not work, send the items separately
+        client.send(header, message, encrypt)
         print(client.recv(2048).decode())
 
-    send(message)
+        if command == "!KEP":
+            other_public_key = client.recv(2048).decode()
+
+    send(argument)
 
 
 # Serverside communications

@@ -8,13 +8,15 @@ import os
 from datetime import datetime
 
 import ecc
-import communications
+import comms_mobius
 
 # Open serial port
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 ser.reset_input_buffer()
 
 def main():
+    
+
     # Run getData function every 3 minutes
     while True:
         getData()

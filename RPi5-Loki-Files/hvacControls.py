@@ -9,7 +9,7 @@ ser.reset_input_buffer()
 command = "off"
 
 # Setting thw default goal temperature to 20.0 C
-goalTemp = 20.0
+goalTemp = None
 
 # Ask User to set a goal temperature
 def setGoalTemp(user_temp):

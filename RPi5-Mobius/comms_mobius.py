@@ -7,7 +7,7 @@ import threading
 import os
 
 import ecc
-import tempSensor
+# import tempSensor
 
 
 # If running as a server, import the hvacControls module
