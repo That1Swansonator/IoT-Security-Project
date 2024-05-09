@@ -8,7 +8,7 @@ import os
 from datetime import datetime
 
 import ecc
-import comms_mobius as comms
+import comms_mobius
 
 # The key bay
 private_key = ecc.generate_private_key()
@@ -22,8 +22,9 @@ ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 ser.reset_input_buffer()
 
 def main():
-    # start key exchange process
-    other_public_key = comms.clientside("!KEP", ecc.compress(public_key), "False")
+    print("start key exchange process")
+    other_public_key = comms_mobius.clientside("!KEP", ecc.compress(public_key), "False")
+    print(other_public_key)
     shared_key = ecc.compute_shared_secret(private_key, other_public_key)
     print(shared_key)
 
@@ -83,6 +84,8 @@ def init_communication():
     # Send a message to the server to initialize communication for key exchange
     pass
 
+if __name__ == "__main__":
+    main()
 
 
 
