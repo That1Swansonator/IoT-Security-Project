@@ -26,6 +26,7 @@ disconnect_msg = "!Disconnect"
 
 def main():
     # Loki is the server
+    serverside()
     pass
 
 # Clientside Communications. Run this function to connect to a server. Runs once per call
