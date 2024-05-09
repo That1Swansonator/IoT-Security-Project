@@ -68,9 +68,31 @@ def decrypt_ECC(encryptedMsg, privKey):
     plaintext = decrypt_AES_GCM(ciphertext, nonce, authTag, secretKey)
     return plaintext
 
+def objectify(encryptedMsg):
+    # This methods uses the encrypted
+    encryptedMsgObj = {
+        'ciphertext': binascii.hexlify(encryptedMsg[0]),
+        'nonce': binascii.hexlify(encryptedMsg[1]),
+        'authTag': binascii.hexlify(encryptedMsg[2]),
+        'ciphertextPubKey': hex(encryptedMsg[3].x) + hex(encryptedMsg[3].y % 2)[2:]
+    }
+
+    return encryptedMsgObj
 
 def main():
-    pass
+    msg = b'Text to be encrypted by ECC public key and ' \
+          b'decrypted by its corresponding ECC private key'
+    print("original msg:", msg)
+    privKey = secrets.randbelow(curve.field.n)
+    pubKey = privKey * curve.g
+
+    encryptedMsg = encrypt_ECC(msg, pubKey)
+    encryptedMsgObj = objectify(encryptedMsg)
+
+    print("encrypted msg:", encryptedMsgObj)
+
+    decryptedMsg = decrypt_ECC(encryptedMsg, privKey)
+    print("decrypted msg:", decryptedMsg)
 
 if __name__ == '__main__':
     main()

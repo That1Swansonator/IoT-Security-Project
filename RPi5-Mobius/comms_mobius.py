@@ -5,30 +5,24 @@ import hashlib, secrets, binascii
 import socket
 import threading
 import os
-
 import ecc
-# import tempSensor
-
-
-# If running as a server, import the hvacControls module
-# import hvacControls
-
 # If running as a client, this file will be imported by tempSensor.py
 
 # The key bay
-private_key = ecc.generate_private_key()
-public_key = ecc.generate_public_key(private_key)
-shared_key = None
-other_public_key = None
-other_private_key = None
-default_port = 5050
+# private_key = ecc.generate_private_key()
+# public_key = ecc.generate_public_key(private_key)
+# shared_key = None
+# other_public_key = None
+# other_private_key = None
 
+default_port = 5050
 
 # Main Functions
 def main():
+    pass
     # start key exchange process
-    clientside("!KEP", ecc.compress(public_key), "False")
-    shared_key = ecc.compute_shared_secret(private_key, other_public_key)
+    # clientside("!KEP", ecc.compress(public_key), "False")
+    # shared_key = ecc.compute_shared_secret(private_key, other_public_key)
 
     # securely send the private key to the other party
     # Encrypt the private key using the shared key
@@ -45,7 +39,7 @@ disconnect_msg = "!Disconnect"
 
 # Clientside Communications. Run this function to connect to a server. Runs once per call
 def clientside(command, argument, encryption_status, d_port=port):
-    # Get a name  from environment variable
+    # Get a name  from environment variable Should be 192.168.1.73
     server = os.getenv('DESTINATION_SERVER')
     address = (server, d_port)
 
@@ -70,8 +64,20 @@ def clientside(command, argument, encryption_status, d_port=port):
         client.send(header, message, encrypt)
         print(client.recv(2048).decode())
 
+        # Public Key Exchange
         if command == "!KEP":
-            other_public_key = client.recv(2048).decode()
+            return client.recv(2048).decode()
+
+        # Private Key Exchange
+        elif command == "!PKE":
+            return client.recv(2048).decode()
+
+        # Retrieve OTP
+        elif command == "!AUTH":
+            return client.recv(2048).decode()
+
+        else:
+            pass
 
     send(argument)
 

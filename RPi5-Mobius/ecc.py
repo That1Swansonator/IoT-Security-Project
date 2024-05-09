@@ -42,6 +42,7 @@ def compress_point(point):
     return hex(point.x) + hex(point.y % 2)[2:]
 
 # For Symmetrical Encryption
+# Might be uneccessary
 def ecc_calc_encryption_keys(pubKey):
     ciphertextPrivKey = secrets.randbelow(curve.field.n)
     ciphertextPubKey = ciphertextPrivKey * curve.g
@@ -70,7 +71,16 @@ def decrypt_ECC(encryptedMsg, privKey):
 
 
 def main():
-    pass
+    msg = b'Text to be encrypted by ECC public key and ' \
+          b'decrypted by its corresponding ECC private key'
+    print("original msg:", msg)
+    privKey = secrets.randbelow(curve.field.n)
+    pubKey = privKey * curve.g
+
+    encryptedMsg = encrypt_ECC(msg, pubKey)
+
+    decryptedMsg = decrypt_ECC(encryptedMsg, privKey)
+    print("decrypted msg:", decryptedMsg)
 
 if __name__ == '__main__':
     main()

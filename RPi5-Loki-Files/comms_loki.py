@@ -24,6 +24,10 @@ port = 5050
 FORMAT = 'utf-8'
 disconnect_msg = "!Disconnect"
 
+def main():
+    # Loki is the server
+    pass
+
 # Clientside Communications. Run this function to connect to a server. Runs once per call
 def clientside(command, argument, encryption_status, d_port=port):
     # Get a name  from environment variable
@@ -90,6 +94,19 @@ def serverside(d_port=port, end=False):
                     compressed_public_key = ecc.compress(public_key)
                     conn.send(compressed_public_key.encode(FORMAT))
 
+                    # Compute the shared key, msg is the other public key
+                    shared_key = ecc.compute_shared_secret(private_key, msg)
+
+                # If the command is !PKE, decrypt the message using the shared key
+                elif cmd == "!PKE":
+                    # Encrypt
+                    return None
+
+                # if the command is AUTH, start the OTP authentication process
+                elif cmd == "!AUTH":
+                    # Start OTP authentication and exchange
+                    pass
+
                 if end or cmd == "!END":
                     #kill the server
                     server.close()
@@ -114,23 +131,33 @@ def serverside(d_port=port, end=False):
     start()
 
 
-def msg_interpreter(cmd, arg, encryption_status):
+def msg_interpreter(cmd, arg, encrypted):
     # If the encryption status is true, decrypt the message. Decrypt using the shared key
-    if encryption_status:
-        # Decrypt the message
-        pass
+    # This will break without the shared key
+    try:
+        if encrypted:
+            # Decrypt the message
+            arg = ecc.decrypt_ECC(arg, shared_key) # Ignore this error
+    except Exception as e:
+        print("Error decrypting message, Did you forget to run the key exchange process?")
+        print(e)
 
-    # Start the key exchange process. The argument is the public key of the incoming client
-    # if cmd == "!KEP":
-    #     clientside()
+
+    # Start the shared secret process. The argument is the public key of the incoming client
+    if cmd == "!KEP":
+        shared_key = ecc.compute_shared_secret(private_key, arg)
 
     # Start new server instance
-    if cmd == "!NE":
+    elif cmd == "!NE":
         # Create a new instance of the server at a different port if needed and
         # kills the instance after running
         serverside(arg, True)
 
-    if cmd == "!TEMP":
+    elif cmd == "!TEMP":
+        pass
+
+    elif cmd == "!AUTH":
+        # Start OTP authentication and exchange
         pass
 
     else:

@@ -8,19 +8,34 @@ import os
 from datetime import datetime
 
 import ecc
-import comms_mobius
+import comms_mobius as comms
+
+# The key bay
+private_key = ecc.generate_private_key()
+public_key = ecc.generate_public_key(private_key)
+shared_key = None
+other_public_key = None
+other_private_key = None
 
 # Open serial port
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 ser.reset_input_buffer()
 
 def main():
-    
+    # start key exchange process
+    other_public_key = comms.clientside("!KEP", ecc.compress(public_key), "False")
+    shared_key = ecc.compute_shared_secret(private_key, other_public_key)
+    print(shared_key)
+
+    # securely send the private key to the other party
+    # Encrypt the private key using the shared key
+    # encrypted_private_key = ecc.encrypt_ECC(private_key, shared_key)
+    # other_private_key = comms.clientside("!PKE", encrypted_private_key, True)
 
     # Run getData function every 3 minutes
-    while True:
-        getData()
-        time.sleep(180)
+    # while True:
+    #     getData()
+    #     time.sleep(180)
 
 def dht11():
     # create an array to store 10 temperature values
