@@ -1,7 +1,5 @@
-setuptools
 pyserial
 mysql-connector-python
 tinyec
 pycryptodome
-serial
 pyotp
