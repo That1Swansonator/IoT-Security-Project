@@ -65,6 +65,7 @@ def clientside(command, argument, encryption_status, d_port=port):
 # Serverside communications
 def serverside(d_port=port, end=False):
     server = socket.gethostbyname(socket.gethostname())
+    print(server)
     address = (server, d_port)
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

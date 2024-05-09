@@ -47,15 +47,15 @@ def clientside(command, argument, encryption_status, d_port=port):
     client.connect(address)
 
     def send(msg):
-        header = command.encode(FORMAT)
+        cmd = command.encode(FORMAT)
         message = msg.encode(FORMAT)
         encrypt = encryption_status.encode(FORMAT)
 
-        hed_len = len(header)
+        cmd_len = len(cmd)
         msg_len = len(message)
         ens_len = len(encrypt)
 
-        send_len = str(hed_len+msg_len+ens_len).encode(FORMAT)
+        send_len = str(cmd_len+msg_len+ens_len).encode(FORMAT)
         send_len += b' ' * (header - len(send_len))
 
         client.send(send_len)
