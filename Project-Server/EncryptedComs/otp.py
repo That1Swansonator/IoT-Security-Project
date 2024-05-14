@@ -1,11 +1,16 @@
 import pyotp
 import time
-import ecc_example as ecc
+import ecc
 import base64
+import sibc
+
+
+
 
 # This file will generate otp's for authentication and message verification
 # This file will also verify otp's
 totp = pyotp.TOTP('base32secret3232')
+
 totp.now() # => '492039'
 
 # OTP verified for current time

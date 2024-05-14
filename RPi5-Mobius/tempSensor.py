@@ -24,10 +24,12 @@ ser.reset_input_buffer()
 def main():
     print("start key exchange process")
     compressed_public_key = ecc.compress(public_key)
-    other_public_key = comms_mobius.clientside("!KEP", compressed_public_key, "False")
-    print(other_public_key)
+    # other_public_key = comms_mobius.clientside("!KEP", compressed_public_key, "False")
+    # print(other_public_key)
     shared_key = ecc.compute_shared_secret(private_key, other_public_key)
     print(shared_key)
+
+    msg = "Test message"
 
     # securely send the private key to the other party
     # Encrypt the private key using the shared key
