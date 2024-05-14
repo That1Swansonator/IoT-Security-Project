@@ -14,6 +14,11 @@ shared_key = None
 other_public_key = None
 other_private_key = None
 
+# Format for messages
+command = None
+argument = None
+encrypted = False
+
 default_port = 5050
 header = 64
 port = 5050
@@ -31,6 +36,7 @@ def serverside():
     def handle_client(conn, address):
         print(f"[NEW CONNECTION] {address} connected")
 
+        stage = 0
         connected = True
         while connected:
             msg_lenght = conn.recv(header).decode(FORMAT)
@@ -46,6 +52,8 @@ def serverside():
 
                 print(f"[{address}] {msg}")
                 conn.send("!RECIEVED".encode(FORMAT))
+
+
 
         conn.close()
 

@@ -51,15 +51,13 @@ def msg_interpreter(cmd, arg, encryption_status):
 
 # Main Functions
 def main():
-    clientside()
-    # start key exchange process
-    # clientside("!KEP", ecc.compress(public_key), "False")
-    # shared_key = ecc.compute_shared_secret(private_key, other_public_key)
-
-    # securely send the private key to the other party
-    # Encrypt the private key using the shared key
-    # encrypted_private_key = ecc.
-    # clientside("!PKE", )
+    # clientside()
+    command = "!TEST"
+    argument = "Hello World!"
+    encrypted = "False"
+    # key = ecc.compress(public_key)
+    message = f"{command}:{argument}:{encrypted}"
+    print(message)
 
 
 if __name__ == '__main__':
