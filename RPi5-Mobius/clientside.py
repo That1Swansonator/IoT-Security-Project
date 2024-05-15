@@ -20,7 +20,8 @@ disconnect_msg = "!Disconnect"
 
 # Clientside Communications. Run this function to connect to a server. Runs once per call
 def clientside(cmd, stuff):
-    server = "192.168.1.59"
+    # server = "192.168.1.59"
+    server = socket.gethostbyname(socket.gethostname())
     address = (server, port)
 
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,7 +39,7 @@ def clientside(cmd, stuff):
         client.send(message)
         print(client.recv(2048).decode())
 
-        if cmd == "!PKE":
+        if cmd == "!KEP":
             other_public_key = client.recv(2048).decode()
             print(other_public_key)
 
@@ -59,12 +60,13 @@ def main():
     key = ecc.compress_point(public_key[1])
     encrypted = "False"
     message = f"{command}:{key}:{encrypted}"
+    # print(public_key)
     clientside(command, message)
-    shared_key = ecc.compute_shared_secret(private_key, other_public_key)
+    # shared_key = ecc.compute_shared_secret(private_key, other_public_key)
 
     # Private Key Exchange
-    command = "!PKE"
-    encrypted = "True"
+    # command = "!PKE"
+    # encrypted = "True"
     # encrypted_private_key = ecc.encrypt_ECC(private_key, shared_key)
     # print(encrypted_private_key)
 
