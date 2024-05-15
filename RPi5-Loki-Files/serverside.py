@@ -53,7 +53,19 @@ def serverside():
                 print(f"[{address}] {msg}")
                 conn.send("!RECIEVED".encode(FORMAT))
 
+                # The message interpreter
+                cmd, arg, encrypted = msg.split(":")
 
+                if cmd == "!KEP":
+                    other_public_key = arg
+                    print(other_public_key)
+                    compressed = ecc.compress_point(public_key[1])
+                    conn.send(compressed.encode(FORMAT))
+                    # close the connection
+                    connected = False
+
+                if cmd == "!PKE":
+                    pass
 
         conn.close()
 

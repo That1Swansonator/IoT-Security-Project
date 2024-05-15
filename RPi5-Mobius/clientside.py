@@ -19,7 +19,7 @@ FORMAT = 'utf-8'
 disconnect_msg = "!Disconnect"
 
 # Clientside Communications. Run this function to connect to a server. Runs once per call
-def clientside():
+def clientside(cmd, stuff):
     server = "192.168.1.59"
     address = (server, port)
 
@@ -38,10 +38,13 @@ def clientside():
         client.send(message)
         print(client.recv(2048).decode())
 
+        if cmd == "!PKE":
+            other_public_key = client.recv(2048).decode()
+            print(other_public_key)
+
     # send("!TEST","Hello World!", False)
-    send("!TEST")
-    send("Hello World!")
-    send("False")
+    send(stuff)
+
 def msg_interpreter(cmd, arg, encryption_status):
     # If the encryption status is true, decrypt the message. Decrypt using the shared key
     if encryption_status:
@@ -51,13 +54,20 @@ def msg_interpreter(cmd, arg, encryption_status):
 
 # Main Functions
 def main():
-    # clientside()
-    command = "!TEST"
-    argument = "Hello World!"
+    # Public Key Exchange
+    command = "!KEP"
+    key = ecc.compress_point(public_key[1])
     encrypted = "False"
-    # key = ecc.compress(public_key)
-    message = f"{command}:{argument}:{encrypted}"
-    print(message)
+    message = f"{command}:{key}:{encrypted}"
+    clientside(command, message)
+    shared_key = ecc.compute_shared_secret(private_key, other_public_key)
+
+    # Private Key Exchange
+    command = "!PKE"
+    encrypted = "True"
+    # encrypted_private_key = ecc.encrypt_ECC(private_key, shared_key)
+    # print(encrypted_private_key)
+
 
 
 if __name__ == '__main__':
