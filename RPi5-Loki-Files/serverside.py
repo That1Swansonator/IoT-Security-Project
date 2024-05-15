@@ -58,11 +58,11 @@ def serverside():
 
                 if cmd == "!KEP":
                     other_public_key = arg
-                    print(other_public_key)
-                    compressed = ecc.compress_point(public_key[1])
-                    conn.send(compressed.encode(FORMAT))
+                    # print(other_public_key)
+                    keystring = str(public_key)
+                    conn.send(keystring.encode(FORMAT))
                     # close the connection
-                    connected = False
+                    # connected = False
 
                 if cmd == "!PKE":
                     pass

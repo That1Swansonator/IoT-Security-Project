@@ -41,7 +41,6 @@ def clientside(cmd, stuff):
 
         if cmd == "!KEP":
             other_public_key = client.recv(2048).decode()
-            print(other_public_key)
 
     # send("!TEST","Hello World!", False)
     send(stuff)
@@ -57,12 +56,14 @@ def msg_interpreter(cmd, arg, encryption_status):
 def main():
     # Public Key Exchange
     command = "!KEP"
-    key = ecc.compress_point(public_key[1])
     encrypted = "False"
-    message = f"{command}:{key}:{encrypted}"
+    message = f"{command}:{public_key}:{encrypted}"
     # print(public_key)
     clientside(command, message)
+    print(other_public_key)
+
     # shared_key = ecc.compute_shared_secret(private_key, other_public_key)
+    # print(shared_key)
 
     # Private Key Exchange
     # command = "!PKE"
